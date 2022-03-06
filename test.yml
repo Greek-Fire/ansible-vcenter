@@ -1,0 +1,9 @@
+- hosts: all
+  gather_facts: false
+  tasks:
+  - vmware_vm_info: 
+      hostname: test
+      userhame: test
+      password: test
+
+
