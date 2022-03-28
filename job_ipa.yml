@@ -1,0 +1,35 @@
+- hosts: all
+  gather_facts: true
+  tasks:
+  - set_fact:
+      temp_prince: "{{ '<%= test=input('ipa principal')  %>' | default(omit) }}"
+      temp_server: "{{ '<%= test=input('ipa server')  %>' | default(omit) }}"
+      temp_domain: "{{ '<%= test=input('ipa domain')  %>' | default(omit) }}"
+      temp_realm:  "{{ '<%= test=input('ipa realm')  %>' | default(omit) }}"
+      ipa_server:  "<%= host_param('ipa_server') %>"
+      ipa_domain:  "<%= host_param('ipa_domain') %>"
+      ipa_admin:   "<%= host_param('ipa_admin')  %>"
+      
+  - set_fact:
+      ipaclient_servers:   '{{ (temp_server != "") | ternary(temp_server, ipa_server) }}'
+      ipaclient_domain:    '{{ (temp_domain != "") | ternary(temp_domain, ipa_domain) }}'
+      ipaadmin_principal:  '{{ (temp_prince != "") | ternary(temp_prince, ipa_admin) }}'
+      
+  - set_fact:
+      ipaclient_realm:     "{{ ipaclient_domain | upper }}"
+      
+      
+  - debug:
+      msg: "p {{ ipaadmin_principal }},s {{ ipaclient_servers }},r {{ ipaclient_realm }},d {{ ipaclient_domain }} {{ foreman_ansible_roles }} "
+<% if preview? -%>
+  PUBLIC_KEY_STRIPPED_OUT
+<% else -%>
+  - set_fact:
+      ipaadmin_password:
+    vars:
+      temp_pass_test:    "<%= host_param('ipa_admin_password') %>"
+      ipaadmin_password: "{{ '<%= test=input('ipaadmin password') %>' | default(omit) }}"
+    no_log: true
+<% end %>
+  - include_role:
+      name: ipaclient

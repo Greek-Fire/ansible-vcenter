@@ -1,0 +1,30 @@
+- name: create a host
+  theforeman.foreman.hostgroup:
+    username:   "{{ satellite_username }}"
+    password:   "{{ satellite_password }}"
+    server_url: "{{ satellite_fqdn }}"
+    state: present
+    name: "{{ satellite_hostgroup }}"
+
+- name: create a host
+  theforeman.foreman.host:
+    username:   "{{ satellite_username }}"
+    password:   "{{ satellite_password }}"
+    server_url: "{{ satellite_fqdn }}"
+    organization: hallas
+    location: hallas
+    name: ttt.example.net
+    state: present 
+    hostgroup: "{{ satellite_hostgroup }}"
+    managed: 0
+    state: present
+    validate_certs: "{{ validate_certs }}"
+    comment: "{{ comment | default('this host was built by satellite') }}"
+    root_pass: red22hat
+    subnet: real
+    ip: 192.168.1.135
+    mac: 56:6f:2e:c8:00:0b
+    provision_method: build
+    build: 1
+    domain: example.net
+    managed: 1

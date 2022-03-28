@@ -1,0 +1,6 @@
+satellite_username: admin
+satellite_password: redhat
+satellite_hostgroup: dev_rhel7
+satellite_fqdn: https://sat.example.net
+validate_certs: false
+host_name: ansible_test
